@@ -64,7 +64,27 @@ if strcmp(this.model,'pf')
          error('Network error: please define the paths of the path-flow model.');
      end
      
-     save(fname,this.P,this.edges(:,4),'-ascii');
+     fid=fopen(fname,'w');
+     
+     fprintf(fid,'clear P; clear u;\n');
+     
+     for i=1:length(this.P)
+         fprintf(fid,'P{%u} = [',i);
+         
+         for j=1:length(this.P{i})
+             
+             fprintf(fid,'%f, %f; ',this.P{i}(j,:));
+             
+         end
+         fprintf(fid,'];\n');
+     end
+   
+     fprintf(fid,'u = [');       
+     fprintf(fid,'%f; ',this.edges(:,4));
+     fprintf(fid,'];\n');
+   
+     fclose(fid);
+     
 else
      error('Not implemented yet.');
 end

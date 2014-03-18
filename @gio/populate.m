@@ -84,7 +84,7 @@ this.P={};
 
 switch input_parser.Results.Method
     case 'bimodal'
-        order=randperm(n*(n-1),K)
+        order=randperm(n*(n-1),K);
         for k=1:K
             row=floor((order(k)-1)/(n-1))+1;
             col=mod(order(k)-1,(n-1))+1;
