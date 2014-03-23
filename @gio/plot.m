@@ -56,16 +56,21 @@ function [] = plot(this,varargin)
 input_parser=inputParser;
 input_parser.CaseSensitive = true;
 addParameter(input_parser,'OrderBy','none',@(x)any(validatestring(x,{'degree','betweenness','eigen-centrality','fiedler-vector','none','all'})));
-addParameter(input_parser,'k',3,@(x) validateattributes(x, {'numeric'},{'scalar'}));
+addParameter(input_parser,'k',3,@(x)validateattributes(x,{'numeric'},{'scalar'}));
 parse(input_parser,varargin{:});
             
 adj=this.adj;
 n=size(adj,1);
 
+% some scaling
 if n < 20
     markersize=3;
-else
-    markersize=ceil(n/50); % scale for plotting purposes
+elseif n < 100
+    markersize=2.5;
+elseif n < 250
+    markersize=ceil(250/n); % scale for plotting purposes
+else 
+    markersize=0.5;
 end
 
 switch input_parser.Results.OrderBy
@@ -169,7 +174,11 @@ for x=1:size(adj,1)   % across all nodes
         continue; 
     end
     nei_inds=kneighbors(adj,x,1);
-    degmat(x,2)=max(deg(nei_inds));
+    if isempty(nei_inds)
+        continue;
+    else
+        degmat(x,2)=max(deg(nei_inds));
+    end
     
 end
 

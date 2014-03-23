@@ -181,23 +181,40 @@ classdef gio < handle
             input_parser.CaseSensitive = true;
             
             addParameter(input_parser,'Directed',this.directed,@(x) validateattributes(x, {'logical'},{}));
-
+            addParameter(input_parser,'Method','random',@(x)any(validatestring(x,{'random','waxtop'})));
+            
+            % for directed
             addParameter(input_parser,'Probability',.5,@(x) validateattributes(x, {'numeric'},{'scalar'}));
             addParameter(input_parser,'Distribution','uniform',@(x)any(validatestring(x,{'uniform','normal','binomial','exponential','sequence'})));
 
             addParameter(input_parser,'DegreeSequence',[],@(x) validateattributes(x, {'double'},{'vector'}));
             addParameter(input_parser,'MaxEdges',inf,@(x) validateattributes(x, {'uint16'},{'scalar'}));
             
+            % for waxtop
+            addParameter(input_parser,'lambda',.6,@(x) validateattributes(x, {'numeric'},{'scalar'}));
+            addParameter(input_parser,'alpha',.4,@(x) validateattributes(x, {'numeric'},{'scalar'}));
+            addParameter(input_parser,'beta',.1,@(x) validateattributes(x, {'numeric'},{'scalar'}));
+            addParameter(input_parser,'domain',[0 10 0 10],@(x) validateattributes(x, {'numeric'}, {'vector','ncols',4}));
+            
             parse(input_parser,varargin{:});
             
             this.directed = input_parser.Results.Directed;
             
             if this.directed == true
-                this.adj = gutils.random_dir(n,input_parser.Results.Probability);                
+                if strcmp(input_parser.Results.Method,'waxtop') == 1
+                    this.adj = full(gutils.waxtop(input_parser.Results.lambda,input_parser.Results.alpha,input_parser.Results.beta,input_parser.Results.domain));
+                else
+                    this.adj = gutils.random_dir(n,input_parser.Results.Probability);
+                end
                 this.edges=this.generate_el(this.adj);
                 this.cap=[];
             else
-                this.adj = gutils.random_undir(n,input_parser.Results.Probability,input_parser.Results.MaxEdges,input_parser.Results.Distribution,input_parser.Results.DegreeSequence);
+                if strcmp(input_parser.Results.Method,'waxtop') == 1
+                    this.adj = full(gutils.waxtop(input_parser.Results.lambda,input_parser.Results.alpha,input_parser.Results.beta,input_parser.Results.domain));
+                    this.adj = this.symmetrize(this.adj);
+                else
+                    this.adj = gutils.random_undir(n,input_parser.Results.Probability,input_parser.Results.MaxEdges,input_parser.Results.Distribution,input_parser.Results.DegreeSequence);
+                end
                 this.edges=this.generate_el(this.adj);
                 this.cap=[];
             end

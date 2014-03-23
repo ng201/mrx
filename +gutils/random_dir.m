@@ -25,7 +25,9 @@ function adj = random_dir(n,p)
 %            
 % Copyright is with the following author(s):
 %
-% (C) 2014 Gábor Németh, BME TMIT
+% (C) 2014 Gábor Németh
+%          Inter–University Centre for Telecommunications and Informatics
+%          Kassai u. 26., Debrecen, Hungary
 %          nemethgab@tmit.bme.hu
 % ---------------------------------------------------------------------------
 %% Legal note:

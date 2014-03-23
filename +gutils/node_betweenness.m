@@ -11,7 +11,6 @@ function betw = node_betweenness(adj)
 n = length(adj);
 spaths=inf(n,n);
 adjk = adj;
-
 % calculate number of shortest paths
 for k=1:n-1
   

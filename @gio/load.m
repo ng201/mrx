@@ -89,10 +89,19 @@ this.P={};
 switch input_parser.Results.FileType
     case '.i1.j1.k1'
         this.adj=this.load_i1j1k1(input_parser.Results.Input);
+        
+        if this.directed == false 
+            this.adj = this.symmetrize(this.adj);
+        end
+        
         this.edges=this.generate_el(this.adj);
         this.cap=[];
     case 'lgf'
         [this.adj,this.cap]=this.load_lgf(input_parser.Results.Input,'CapTag',input_parser.Results.CapTag,'LengthTag',input_parser.Results.LengthTag,'Directed',this.directed);
+        if this.directed == false 
+            this.adj = this.symmetrize(this.adj);
+            this.cap = this.symmetrize(this.cap);
+        end
         this.edges=this.generate_el(this.adj);
     otherwise
         
