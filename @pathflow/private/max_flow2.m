@@ -22,10 +22,36 @@ function mflow=max_flow2(pf, theta0, H, h)
 %
 % mflow                   - the (row vector of) max flows
 %
-% (C) 2012 Gábor Németh, BME-TMIT
+%
+%
+% Copyright is with the following author(s):
+%
+% (C) 2014 Gábor Németh
+%          Inter–University Centre for Telecommunications and Informatics
+%          Kassai u. 26., Debrecen, Hungary
 %          nemethgab@tmit.bme.hu
+% ---------------------------------------------------------------------------
+%% Legal note:
+%          This program is free software; you can redistribute it and/or
+%          modify it under the terms of the GNU General Public
+%          License as published by the Free Software Foundation; either
+%          version 2.1 of the License, or (at your option) any later version.
+%
+%          This program is distributed in the hope that it will be useful,
+%          but WITHOUT ANY WARRANTY; without even the implied warranty of
+%          MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+%          General Public License for more details.
+% 
+%          You should have received a copy of the GNU General Public
+%          License along with this library; if not, write to the 
+%          Free Software Foundation, Inc., 
+%          59 Temple Place, Suite 330, 
+%          Boston, MA  02111-1307  USA
+%
+% ---------------------------------------------------------------------------   
+%%
 
-error(nargchk(4,4,nargin));
+narginchk(4,4);
 
 % if size(H,1)~=length(h)
 %     error('H must have the same number of rows as h.');
@@ -86,7 +112,7 @@ for k=1:pf.K
     b=[b; h];
     
     lb=zeros(variables_num,1);
-    f=zeros(variables_num,1);
+    f=zeros(1,variables_num);
     f(variables_num)=-1;
         
     [x_tmp,fval,exitflag]=MRXSLscf(opts,f,A,b,Aeq,beq,lb,[],[]);
