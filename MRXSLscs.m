@@ -101,9 +101,9 @@ switch this.LPSolver
     case 3
                 if size(beq,1)~=0
                     INDEQ=[1:1:size(Aeq,1)];                
-                    [xopt,obj,~,details]=cplexint([],f',[Aeq; A],[beq; b],INDEQ,[],lb,ub,[],[],this.options);
+                    [xopt,obj,~,details]=cplexint([],f',full([Aeq; A]),full([beq; b]),INDEQ,[],lb,ub,[],[],this.options);
                 else
-                    [xopt,obj,~,details]=cplexint([],f',A,b,[],[],lb,ub,[],[],this.options);
+                    [xopt,obj,~,details]=cplexint([],f',full(A),full(b),[],[],lb,ub,[],[],this.options);
                 end
 
                 how = lower(details.statstring); 
@@ -111,7 +111,7 @@ switch this.LPSolver
                    strcmp(how, 'optimaltol') || strcmp(how, 'integer optimal solution') || ...
                    strcmp(how, 'optimal with unscaled infeasibilities')
                     exitflag = 1;      
-                elseif strcmp(R.how,'unbounded or infeasible')
+                elseif strcmp(how,'unbounded or infeasible')
                     exitflag = -5;
                 else
                     exitflag = -1;
@@ -126,7 +126,7 @@ switch this.LPSolver
                         
                         lambda.ineqlin = lambda2(me+1:me+m);
                         lambda.eqlin = lambda2(1:me);
-                        if ~isempty(lb)
+                        if ~isempty(lb)                            
                             lambda.lower = lambda2(me+m+1:me+m+n);                             
                         else
                             lambda.lower = zeros(n,1);
@@ -134,7 +134,7 @@ switch this.LPSolver
                         if ~isempty(ub) && isempty(lb)                         
                             lambda.upper = lambda2(me+m+1:me+m+n);
                         elseif ~isempty(ub) && ~isempty(lb)
-                            lambda.upper = lambda2(me+m+n+1:S.me+m+n+n);
+                            lambda.upper = lambda2(me+m+n+1:me+m+n+n);
                         else
                             lambda.upper = zeros(n,1);
                         end

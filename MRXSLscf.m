@@ -15,13 +15,15 @@ function [xopt,obj,exitflag,lambda]=MRXSLscf(this,f,A,b,Aeq,beq,lb,ub,x0,options
 % OUTPUT                                                                                                    
 % ---------------------------------------------------------------------------
 %
+%
 % Copyright is with the following author(s):
 %
-% (C) 2013 Gábor Németh, BME-TMIT
+% (C) 2014 Gábor Németh
+%          Inter–University Centre for Telecommunications and Informatics
+%          Kassai u. 26., Debrecen, Hungary
 %          nemethgab@tmit.bme.hu
-%%
 % ---------------------------------------------------------------------------
-% Legal note:
+%% Legal note:
 %          This program is free software; you can redistribute it and/or
 %          modify it under the terms of the GNU General Public
 %          License as published by the Free Software Foundation; either
@@ -38,8 +40,9 @@ function [xopt,obj,exitflag,lambda]=MRXSLscf(this,f,A,b,Aeq,beq,lb,ub,x0,options
 %          59 Temple Place, Suite 330, 
 %          Boston, MA  02111-1307  USA
 %
-% ---------------------------------------------------------------------------
+% ---------------------------------------------------------------------------   
 %%
+
 
 if any(b<-this.Infty)
     error('MRXSLscf: Upper bound exceeded. Most probably the problem is unbounded.');
@@ -98,7 +101,7 @@ switch this.LPSolver
             
 
     %% CPLEX interfaced by cplexint
-    case 3
+    case 3                  
                 if size(beq,1)~=0
                     INDEQ=[1:1:size(Aeq,1)];                
                     [xopt,obj,~,details]=cplexint([],f',[Aeq; A],[beq; b],INDEQ,[],lb,ub,[],[],this.options);
@@ -134,7 +137,7 @@ switch this.LPSolver
                         if ~isempty(ub) && isempty(lb)                         
                             lambda.upper = lambda2(me+m+1:me+m+n);
                         elseif ~isempty(ub) && ~isempty(lb)
-                            lambda.upper = lambda2(me+m+n+1:S.me+m+n+n);
+                            lambda.upper = lambda2(me+m+n+1:me+m+n+n);
                         else
                             lambda.upper = zeros(n,1);
                         end
