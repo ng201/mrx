@@ -17,8 +17,33 @@ function b=contains(pf, theta)
 % ---------------------------------------------------------------------------
 % b                       - bool
 %
-% (C) 2012 Gábor Németh, BME-TMIT
+%
+% Copyright is with the following author(s):
+%
+% (C) 2014 Gábor Németh
+%          Inter–University Centre for Telecommunications and Informatics
+%          Kassai u. 26., Debrecen, Hungary
 %          nemethgab@tmit.bme.hu
+% ---------------------------------------------------------------------------
+%% Legal note:
+%          This program is free software; you can redistribute it and/or
+%          modify it under the terms of the GNU General Public
+%          License as published by the Free Software Foundation; either
+%          version 2.1 of the License, or (at your option) any later version.
+%
+%          This program is distributed in the hope that it will be useful,
+%          but WITHOUT ANY WARRANTY; without even the implied warranty of
+%          MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+%          General Public License for more details.
+% 
+%          You should have received a copy of the GNU General Public
+%          License along with this library; if not, write to the 
+%          Free Software Foundation, Inc., 
+%          59 Temple Place, Suite 330, 
+%          Boston, MA  02111-1307  USA
+%
+% ---------------------------------------------------------------------------   
+%%
 
 K=pf.K;
 P=pf.P;
@@ -54,17 +79,8 @@ end
 A(K+1:K+M,p+1:p+M)=eye(M,M); %add slacks
 
 opts=MRXLoad();
-[x,fval,exitflag]=MRXSLscf(opts,zeros(1,p+slacks),[],[],A,b,zeros(p+slacks,1),[],[]);
+[x,fval,exitflag]=MRXSLscs(opts,zeros(1,p+slacks),[],[],A,b,zeros(p+slacks,1),[],[]);
 
-%INDEQ=[1:1:size(A,1)];
-%OPTIONS.verbose=0;
-%[x,fval,exitflag,details]=solvers.cplexint.cplexint([],[-ones(p,1); zeros(slacks,1)],A,b,INDEQ,[],zeros(p+slacks,1),[],[],[],OPTIONS);
-%[~,~,exitflag,~]=solvers.cplexint.cplexint([],zeros(p+slacks,1),A,b,INDEQ,[],zeros(p+slacks,1),[],[],[],OPTIONS);
-%if exitflag~=1
-%    error('CPLEXINT exited with error code %d.',exitflag);         
-%end
-%disp(details.statstring);
-%disp(exitflag)
 if exitflag==1
     b=1;    
 else
